@@ -1,0 +1,49 @@
+name: Test
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches: ['*']
+  schedule:
+  - cron: "0 5 * * *"
+
+# Cancel any in-progress runs when a new run is triggered
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    # Test package build in matrix of OS and Python versions
+    name: Test package
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+        - 3.9
+        - 3.10
+        - 3.11
+        - 3.12
+        - 3.13
+        os:
+        - ubuntu-latest
+        - macos-latest
+        - windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install package and dependencies
+      run: |
+        pip install -e .
+    - name: Run tests
+      run: |
+        pip install pytest
+        pytest .
