@@ -2,13 +2,8 @@ import doctest
 import importlib
 import pkgutil
 
-from pathlib import Path
-
-
-import pytest
-
 import joke_machine
-
+import pytest
 
 modules = [
     importlib.import_module(name)

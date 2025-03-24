@@ -488,5 +488,3 @@ def main():
 
     elif args.fact:
         print(get_fun_fact())
-
-__name__ = "joke_machine"
