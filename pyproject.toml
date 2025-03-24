@@ -23,6 +23,7 @@ classifiers = [
 dev = [
     "pytest>=6.0",
     "pre-commit",
+    "mypy",
 ]
 
 [project.urls]
