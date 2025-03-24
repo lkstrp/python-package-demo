@@ -1,5 +1,7 @@
-"""Some docstring"""
-
+"""
+JokeMachine - A fun tool that generates jokes, puns, and programming humor
+using Python's standard library.
+"""
 # ruff: noqa: W291
 
 import argparse
@@ -12,6 +14,8 @@ import time
 from datetime import datetime
 
 __version__ = "0.1.0"
+
+# Collection of jokes organized by category
 JOKES = {
     "programming": [
         "Why do programmers prefer dark mode? Because light attracts bugs!",
@@ -51,6 +55,7 @@ JOKES = {
     ],
 }
 
+# Collection of fun facts
 FUN_FACTS = [
     "A day on Venus is longer than a year on Venus.",
     "The shortest war in history was between Britain and Zanzibar on August 27, 1896. Zanzibar surrendered after 38 minutes.",
@@ -64,7 +69,7 @@ FUN_FACTS = [
     "The inventor of the Pringles can is buried in one (at his request).",
 ]
 
-
+# ASCII art for the header
 HEADER_ART = """
      _       _         __  __            _     _            
     | | ___ | | _____ |  \\/  | __ _  ___| |__ (_)_ __   ___ 
@@ -75,14 +80,52 @@ HEADER_ART = """
 
 
 def print_header():
+    """
+    Print the JokeMachine ASCII art header and version information.
+
+    This function displays the ASCII art logo for JokeMachine along with
+    the current version number to provide a visual introduction to the program.
+
+    Examples
+    --------
+    >>> print_header()  # doctest: +SKIP
+    """
     print(HEADER_ART)
     print(f"JokeMachine v{__version__} - Your daily dose of humor\n")
 
 
 def get_joke(category=None):
+    """
+    Get a random joke, optionally from a specific category.
+
+    Parameters
+    ----------
+    category : str, optional
+        The joke category to select from ('programming', 'dad', or 'puns').
+        If None or invalid, a joke from any category will be returned.
+
+    Returns
+    -------
+    str
+        A randomly selected joke from the specified category or from all categories.
+
+    Examples
+    --------
+    >>> import random
+    >>> random.seed(42)  # For reproducible testing
+    >>> joke = get_joke('programming')
+    >>> joke in JOKES['programming']
+    True
+
+    >>> random.seed(42)
+    >>> joke = get_joke()  # Random joke from any category
+    >>> any(joke in jokes for jokes in JOKES.values())
+    True
+    """
     if category and category in JOKES:
         return random.choice(JOKES[category])
 
+    # If no category specified or invalid category, choose from all jokes
     all_jokes = []
     for jokes in JOKES.values():
         all_jokes.extend(jokes)
@@ -90,10 +133,44 @@ def get_joke(category=None):
 
 
 def get_fun_fact():
+    """
+    Get a random fun fact from the collection.
+
+    Returns
+    -------
+    str
+        A randomly selected fun fact.
+
+    Examples
+    --------
+    >>> import random
+    >>> random.seed(42)
+    >>> fact = get_fun_fact()
+    >>> fact in FUN_FACTS
+    True
+    """
     return random.choice(FUN_FACTS)
 
 
 def generate_dad_joke_response():
+    """
+    Generate a typical humorous response to a dad joke.
+
+    Returns
+    -------
+    str
+        A randomly selected response appropriate for reacting to a dad joke.
+
+    Examples
+    --------
+    >>> import random
+    >>> random.seed(42)
+    >>> response = generate_dad_joke_response()
+    >>> isinstance(response, str)
+    True
+    >>> len(response) > 0
+    True
+    """
     responses = [
         "*groans*",
         "*eye roll*",
@@ -110,6 +187,29 @@ def generate_dad_joke_response():
 
 
 def tell_joke_with_delay(joke, delay=1.5):
+    """
+    Print a joke with a dramatic pause for better comedic effect.
+
+    This function splits the joke at a natural break point (either after a question
+    mark or after the first sentence) and adds a pause before delivering the punchline.
+
+    Parameters
+    ----------
+    joke : str
+        The joke text to be displayed.
+    delay : float, optional
+        The pause duration in seconds between setup and punchline. Default is 1.5.
+
+    Examples
+    --------
+    >>> tell_joke_with_delay("Why did the chicken cross the road? To get to the other side.", 0.1)  # doctest: +SKIP
+    Why did the chicken cross the road?
+    To get to the other side.
+
+    >>> tell_joke_with_delay("I'm reading a book about anti-gravity. It's impossible to put down!", 0.1)  # doctest: +SKIP
+    I'm reading a book about anti-gravity.
+    It's impossible to put down!
+    """
     if "?" in joke:
         setup, punchline = joke.split("?", 1)
         print(f"{setup}?")
@@ -126,6 +226,26 @@ def tell_joke_with_delay(joke, delay=1.5):
 
 
 def save_favorite(joke):
+    """
+    Save a joke to the user's favorites file.
+
+    This function saves the provided joke to a JSON file in the user's home directory
+    along with a timestamp of when it was saved.
+
+    Parameters
+    ----------
+    joke : str
+        The joke text to save to favorites.
+
+    Notes
+    -----
+    The favorites are stored in ~/.joke_machine_favorites.json
+
+    Examples
+    --------
+    >>> save_favorite("Why do programmers prefer dark mode? Because light attracts bugs!")  # doctest: +SKIP
+    Joke saved to favorites at ~/.joke_machine_favorites.json
+    """
     favorites_file = os.path.expanduser("~/.joke_machine_favorites.json")
 
     # Create or load existing favorites
@@ -138,10 +258,12 @@ def save_favorite(joke):
     else:
         favorites = []
 
+    # Add the new favorite with timestamp
     favorites.append(
         {"joke": joke, "saved_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
     )
 
+    # Save back to file
     with open(favorites_file, "w") as f:
         json.dump(favorites, f, indent=2)
 
@@ -149,6 +271,21 @@ def save_favorite(joke):
 
 
 def list_favorites():
+    """
+    List all jokes saved in the user's favorites file.
+
+    This function reads the favorites file from the user's home directory
+    and displays all saved jokes along with their save timestamps.
+
+    Notes
+    -----
+    The favorites are read from ~/.joke_machine_favorites.json
+
+    Examples
+    --------
+    >>> list_favorites()
+    You haven't saved any favorites yet.
+    """
     favorites_file = os.path.expanduser("~/.joke_machine_favorites.json")
 
     if not os.path.exists(favorites_file):
@@ -175,6 +312,26 @@ def list_favorites():
 
 
 def interactive_mode():
+    """
+    Run the joke machine in an interactive command-line interface mode.
+
+    This function starts an interactive session where users can enter
+    commands to get jokes, fun facts, manage favorites, and more.
+
+    Commands
+    --------
+    joke [category] : Get a joke, optionally from a specific category
+    fact : Get a random fun fact
+    save : Save the last joke to favorites
+    favorites : List saved favorite jokes
+    categories : List available joke categories
+    help : Show available commands
+    exit/quit : Exit interactive mode
+
+    Examples
+    --------
+    >>> interactive_mode()  # doctest: +SKIP
+    """
     print_header()
     print("Welcome to Interactive Mode!")
     print("Type 'exit' or 'quit' to leave, 'help' for commands.\n")
@@ -237,6 +394,34 @@ def interactive_mode():
 
 
 def main():
+    """
+    Main function to run the joke machine based on command-line arguments.
+
+    This function parses command-line arguments and executes the appropriate
+    functionality based on the provided options.
+
+    Command-line Arguments
+    ---------------------
+    --joke, -j : Tell a random joke
+    --category, -c : Specify joke category (programming, dad, puns)
+    --fact, -f : Tell a random fun fact
+    --save, -s : Save the joke to favorites
+    --favorites : List your favorite jokes
+    --interactive, -i : Run in interactive mode
+    --version, -v : Show version information
+
+    Examples
+    --------
+    >>> import sys
+    >>> sys.argv = ['joke_machine', '--joke']
+    >>> main()  # doctest: +SKIP
+
+    >>> sys.argv = ['joke_machine', '--category', 'programming']
+    >>> main()  # doctest: +SKIP
+
+    >>> sys.argv = ['joke_machine', '--interactive']
+    >>> main()  # doctest: +SKIP
+    """
     parser = argparse.ArgumentParser(
         description="JokeMachine - A fun tool for jokes and humor",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -271,10 +456,12 @@ def main():
 
     args = parser.parse_args()
 
+    # If no arguments provided, show help
     if len(sys.argv) == 1:
         parser.print_help()
         return
 
+    # If interactive mode requested
     if args.interactive:
         interactive_mode()
         return
@@ -282,6 +469,7 @@ def main():
     # Print header for non-interactive mode
     print_header()
 
+    # Handle command-line arguments
     if args.favorites:
         list_favorites()
         return
@@ -300,3 +488,5 @@ def main():
 
     elif args.fact:
         print(get_fun_fact())
+
+__name__ = "joke_machine"

@@ -3,7 +3,7 @@ import os
 from unittest.mock import MagicMock, patch
 
 # Import functions from the joke_machine module
-from joke_machine import (
+from joke_machine.app import (
     generate_dad_joke_response,
     get_fun_fact,
     get_joke,
@@ -31,7 +31,7 @@ def test_get_joke_no_category(mock_choice, mock_jokes):
         all_jokes.extend(jokes)
     mock_choice.return_value = "Selected joke"
 
-    with patch("joke_machine.JOKES", mock_jokes):
+    with patch("joke_machine.app.JOKES", mock_jokes):
         result = get_joke()
 
     assert result == "Selected joke"
@@ -43,7 +43,7 @@ def test_get_joke_with_category(mock_choice, mock_jokes):
     """Test getting a joke from a specific category"""
     mock_choice.return_value = "Test joke 1"
 
-    with patch("joke_machine.JOKES", mock_jokes):
+    with patch("joke_machine.app.JOKES", mock_jokes):
         result = get_joke("test")
 
     assert result == "Test joke 1"
@@ -55,7 +55,7 @@ def test_get_fun_fact(mock_choice, mock_facts):
     """Test getting a random fun fact"""
     mock_choice.return_value = "Test fact 1"
 
-    with patch("joke_machine.FUN_FACTS", mock_facts):
+    with patch("joke_machine.app.FUN_FACTS", mock_facts):
         result = get_fun_fact()
 
     assert result == "Test fact 1"

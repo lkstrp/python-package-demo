@@ -3,7 +3,7 @@ import os
 from unittest.mock import MagicMock, patch
 
 # Import functions from the joke_machine module
-from joke_machine import list_favorites, save_favorite
+from joke_machine.app import list_favorites, save_favorite
 
 
 def test_save_favorite_new_file(favorites_path_patch, capsys):

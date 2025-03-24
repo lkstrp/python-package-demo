@@ -3,14 +3,14 @@ from unittest.mock import patch
 import pytest
 
 # Import functions from the joke_machine module
-from joke_machine import generate_dad_joke_response, get_joke, tell_joke_with_delay
+from joke_machine.app import generate_dad_joke_response, get_joke, tell_joke_with_delay
 
 
 @pytest.mark.parametrize("category", ["programming", "dad", "puns"])
 def test_joke_categories_exist(category):
     """Test that all expected joke categories exist"""
     with patch(
-        "joke_machine.JOKES",
+        "joke_machine.app.JOKES",
         {
             "programming": ["Programming joke"],
             "dad": ["Dad joke"],
@@ -29,7 +29,7 @@ def test_programming_jokes(mock_choice):
     )
 
     with patch(
-        "joke_machine.JOKES",
+        "joke_machine.app.JOKES",
         {
             "programming": [
                 "Why do programmers prefer dark mode? Because light attracts bugs!"
@@ -50,7 +50,7 @@ def test_dad_jokes(mock_choice):
     )
 
     with patch(
-        "joke_machine.JOKES",
+        "joke_machine.app.JOKES",
         {
             "dad": [
                 "I told my wife she was drawing her eyebrows too high. She looked surprised."
@@ -68,7 +68,7 @@ def test_pun_jokes(mock_choice):
     mock_choice.return_value = "I'm on a seafood diet. I see food and I eat it."
 
     with patch(
-        "joke_machine.JOKES",
+        "joke_machine.app.JOKES",
         {"puns": ["I'm on a seafood diet. I see food and I eat it."]},
     ):
         joke = get_joke("puns")
@@ -86,7 +86,7 @@ def test_dad_joke_response(mock_choice, mock_sleep, capsys):
     ]
 
     with patch(
-        "joke_machine.JOKES",
+        "joke_machine.app.JOKES",
         {"dad": ["Why don't eggs tell jokes? They'd crack each other up."]},
     ):
         joke = get_joke("dad")

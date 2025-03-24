@@ -1,4 +1,4 @@
-from joke_machine import main
+from joke_machine.app import main
 
 if __name__ == "__main__":
     main()
