@@ -1,21 +1,16 @@
-import pytest
-import sys
-import io
-from unittest.mock import patch, MagicMock
-import random
-import os
 import json
+import os
+from unittest.mock import MagicMock, patch
+
 # Import functions from the joke_machine module
 from joke_machine import (
-    print_header,
-    get_joke,
-    get_fun_fact,
     generate_dad_joke_response,
-    tell_joke_with_delay,
-    save_favorite,
+    get_fun_fact,
+    get_joke,
     list_favorites,
-    interactive_mode,
-    main,
+    print_header,
+    save_favorite,
+    tell_joke_with_delay,
 )
 
 
@@ -129,7 +124,7 @@ def test_save_favorite(mock_datetime, favorites_path_patch, capsys):
     save_favorite(joke)
 
     # Check that the joke was saved to the file
-    with open(favorites_path_patch, "r") as f:
+    with open(favorites_path_patch) as f:
         saved_data = json.load(f)
 
     assert len(saved_data) == 1

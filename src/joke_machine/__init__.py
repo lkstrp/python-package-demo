@@ -1,19 +1,23 @@
-import random
-import time
+"""Some docstring"""
+
+# ruff: noqa: W291
+
 import argparse
-import textwrap
 import json
 import os
+import random
 import sys
+import textwrap
+import time
 from datetime import datetime
 
 __version__ = "0.1.0"
 JOKES = {
-"programming": [
-"Why do programmers prefer dark mode? Because light attracts bugs!",
-"A SQL query walks into a bar, walks up to two tables and asks, 'Can I join you?'",
-"How many programmers does it take to change a light bulb? None, that's a hardware problem.",
-"Why was the JavaScript developer sad? Because he didn't know how to 'null' his feelings.",
+    "programming": [
+        "Why do programmers prefer dark mode? Because light attracts bugs!",
+        "A SQL query walks into a bar, walks up to two tables and asks, 'Can I join you?'",
+        "How many programmers does it take to change a light bulb? None, that's a hardware problem.",
+        "Why was the JavaScript developer sad? Because he didn't know how to 'null' his feelings.",
         "Why did the developer go broke? Because he used up all his cache!",
         "!false - It's funny because it's true!",
         "A programmer puts two glasses on his bedside table before going to sleep. One full of water in case he gets thirsty, and one empty in case he doesn't.",
@@ -21,24 +25,24 @@ JOKES = {
         "Why do Python programmers wear glasses? Because they can't C#.",
         "What's a programmer's favorite hangout place? The Foo Bar.",
     ],
-"dad": [
+    "dad": [
         "I told my wife she was drawing her eyebrows too high. She looked surprised.",
-    "Why don't scientists trust atoms? Because they make up everything!",
+        "Why don't scientists trust atoms? Because they make up everything!",
         "What did the ocean say to the beach? Nothing, it just waved.",
-    "I would tell you a joke about pizza, but it's too cheesy.",
+        "I would tell you a joke about pizza, but it's too cheesy.",
         "Why don't eggs tell jokes? They'd crack each other up.",
         "I'm reading a book about anti-gravity. It's impossible to put down!",
-    "Did you hear about the mathematician who's afraid of negative numbers? He'll stop at nothing to avoid them.",
+        "Did you hear about the mathematician who's afraid of negative numbers? He'll stop at nothing to avoid them.",
         "Why did the scarecrow win an award? Because he was outstanding in his field!",
-    "What do you call a fake noodle? An impasta!",
+        "What do you call a fake noodle? An impasta!",
         "How do you organize a space party? You planet!",
     ],
-"puns": [
-"I was wondering why the ball was getting bigger. Then it hit me.",
-"I'm on a seafood diet. I see food and I eat it.",
-"What's the best time to go to the dentist? Tooth-hurty!",
+    "puns": [
+        "I was wondering why the ball was getting bigger. Then it hit me.",
+        "I'm on a seafood diet. I see food and I eat it.",
+        "What's the best time to go to the dentist? Tooth-hurty!",
         "I used to be a baker, but I couldn't make enough dough.",
-    "Becoming a vegetarian is a huge missed steak.",
+        "Becoming a vegetarian is a huge missed steak.",
         "I've got a great joke about construction, but I'm still working on it.",
         "I was going to tell a time traveling joke, but you didn't like it.",
         "What do you call a parade of rabbits hopping backwards? A receding hare-line.",
@@ -59,6 +63,7 @@ FUN_FACTS = [
     "Cats can't taste sweet things because of a genetic mutation.",
     "The inventor of the Pringles can is buried in one (at his request).",
 ]
+
 
 HEADER_ART = """
      _       _         __  __            _     _            
@@ -115,7 +120,7 @@ def tell_joke_with_delay(joke, delay=1.5):
         if len(parts) > 1:
             print(f"{parts[0]}.")
             time.sleep(delay)
-            print(f"{'. '.join(parts[1:])}"      )
+            print(f"{'. '.join(parts[1:])}")
         else:
             print(joke)
 
@@ -125,7 +130,7 @@ def save_favorite(joke):
 
     # Create or load existing favorites
     if os.path.exists(favorites_file):
-        with open(favorites_file, "r"     ) as f:
+        with open(favorites_file) as f:
             try:
                 favorites = json.load(f)
             except json.JSONDecodeError:
@@ -140,8 +145,8 @@ def save_favorite(joke):
     with open(favorites_file, "w") as f:
         json.dump(favorites, f, indent=2)
 
-    print(   f"Joke saved to favorites at {favorites_file}"  )
-   
+    print(f"Joke saved to favorites at {favorites_file}")
+
 
 def list_favorites():
     favorites_file = os.path.expanduser("~/.joke_machine_favorites.json")
@@ -149,21 +154,21 @@ def list_favorites():
     if not os.path.exists(favorites_file):
         print("You haven't saved any favorites yet.")
         return
-   
-    with open(favorites_file, "r") as f:
+
+    with open(favorites_file) as f:
         try:
             favorites = json.load(f)
             if not favorites:
                 print("Your favorites list is empty.")
                 return
-   
+
             print("\n=== Your Favorite Jokes ===\n")
             for i, fav in enumerate(favorites, 1):
                 joke = fav["joke"]
                 saved_at = fav["saved_at"]
                 print(f"{i}. {joke}")
-                print(f"   Saved on: {saved_at}"     )
-                print(   )
+                print(f"   Saved on: {saved_at}")
+                print()
 
         except json.JSONDecodeError:
             print("Error reading favorites file. It might be corrupted.")
@@ -171,7 +176,7 @@ def list_favorites():
 
 def interactive_mode():
     print_header()
-    print("Welcome to Interactive Mode!"     )
+    print("Welcome to Interactive Mode!")
     print("Type 'exit' or 'quit' to leave, 'help' for commands.\n")
 
     last_joke = None
@@ -245,20 +250,30 @@ def main():
     )
 
     parser.add_argument("--joke", "-j", action="store_true", help="Tell a random joke")
-    parser.add_argument(        "--category", "-c", choices=list(JOKES.keys()), help="Specify joke category"    )
-    parser.add_argument(        "--fact", "-f", action="store_true", help="Tell a random fun fact"    )
-    parser.add_argument(        "--save", "-s", action="store_true", help="Save the joke to favorites"    )
-    parser.add_argument(        "--favorites", action="store_true", help="List your favorite jokes"    )
-    parser.add_argument(        "--interactive", "-i", action="store_true", help="Run in interactive mode"    )
-    parser.add_argument(        "--version", "-v", action="version", version=f"JokeMachine v{__version__}"    )
+    parser.add_argument(
+        "--category", "-c", choices=list(JOKES.keys()), help="Specify joke category"
+    )
+    parser.add_argument(
+        "--fact", "-f", action="store_true", help="Tell a random fun fact"
+    )
+    parser.add_argument(
+        "--save", "-s", action="store_true", help="Save the joke to favorites"
+    )
+    parser.add_argument(
+        "--favorites", action="store_true", help="List your favorite jokes"
+    )
+    parser.add_argument(
+        "--interactive", "-i", action="store_true", help="Run in interactive mode"
+    )
+    parser.add_argument(
+        "--version", "-v", action="version", version=f"JokeMachine v{__version__}"
+    )
 
     args = parser.parse_args()
-
 
     if len(sys.argv) == 1:
         parser.print_help()
         return
-
 
     if args.interactive:
         interactive_mode()
@@ -266,7 +281,6 @@ def main():
 
     # Print header for non-interactive mode
     print_header()
-
 
     if args.favorites:
         list_favorites()

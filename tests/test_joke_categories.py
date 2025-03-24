@@ -1,8 +1,9 @@
-import pytest
 from unittest.mock import patch
 
+import pytest
+
 # Import functions from the joke_machine module
-from joke_machine import get_joke, tell_joke_with_delay, generate_dad_joke_response
+from joke_machine import generate_dad_joke_response, get_joke, tell_joke_with_delay
 
 
 @pytest.mark.parametrize("category", ["programming", "dad", "puns"])
